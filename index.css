@@ -1,0 +1,63 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+
+.keyboard-area {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  width: 975px;
+  background: rgb(0, 0, 0);
+}
+.button {
+  margin: 5px;
+  width: 50px;
+  height: 50px;
+  color:rgb(248, 248, 242);
+  text-align: center;
+  line-height: 50px;
+  background: rgba(7, 7, 7, 0.788);
+  box-shadow: 0 0 5px 3px blue;
+}
+
+[id ="9"] {
+  width: 80px;
+}
+[id = "8"] {
+  width: 130px;
+}
+[id = "13"] {
+  width: 100px;
+}
+[id = "20"] {
+  width: 110px;
+}
+[id = "16"] {
+  width: 130px;
+}
+[id = "17"] {
+  width: 90px;
+}
+[id = "32"] {
+  width: 350px;
+}
+[id = "18"] {
+  width: 80px;
+}
+[id = "38"] {
+  margin-right: 50px;
+}
+[id = "46"] {
+  width: 70px;
+}
+.keyboard-area div:nth-child(53) {
+  width: 110px;
+}
+.active {
+  box-shadow: 0 0 8px red;
+  transform: scale(0.95);
+  transition: 0.3s;
+}
