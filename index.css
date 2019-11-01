@@ -3,12 +3,16 @@
   padding: 0;
   border: 0;
 }
-
+body {
+  display:grid;
+  align-content: center;
+}
 
 .keyboard-area {
   display: flex;
   flex-wrap: wrap;
   margin: 0 auto;
+  //-top:20%;
   width: 975px;
   background: rgb(0, 0, 0);
 }
@@ -59,5 +63,5 @@
 .active {
   box-shadow: 0 0 8px red;
   transform: scale(0.95);
-  transition: 0.3s;
+  transition: 0.1s;
 }
