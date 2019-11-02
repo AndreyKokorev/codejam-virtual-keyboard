@@ -18,10 +18,11 @@ const keyBoard = {
   buttonsSigns: [
     ["`", "~", ""], ["1", "!", ""], ["2", "@", ""], ["3", "#", ""], ["4", "$", ""], ["5", "%", ""], ["6", "^", ""], ["7", "&", ""], ["8", "*", ""], ["9", "(", ""], ["0", ")", ""], ["-", "_", ""], ["=", "+", ""], ["Backspace", ""], 
     ["Tab", "", ""], ["q", "", "й"], ["w", "", "ц"], ["e", "", "у"], ["r", "", "к"], ["t", "", "е"], ["y", "", "н"], ["u", "", "г"], ["i", "", "ш"], ["o", "", "щ"], ["p", "", "з"], ["[", "{", "х"], ["]", "}", "ъ"], ["Enter", "", ""], 
-    ["Caps Lock", "", ""], ["a", "", "ф"], ["s", "", "ы"], ["d", "", "в"], ["f", "", "а"], ["g", "", "п"], ["h", "", "р"], ["j", "", "о"], ["k", "", "л"], ["l", "", "д"], [";", ":", "ж"], ["'", "\"", "э"], ["\\", "|", "\\"], 
+    ["Caps Lock", "", ""], ["a", "", "ф"], ["s", "", "ы"], ["d", "", "в"], ["f", "", "а"], ["g", "", "п"], ["h", "", "р"], ["j", "", "о"], ["k", "", "л"], ["l", "", "д"], [";", ":", "ж"], ["'", "\"", "э"], ["\\", "|", ","], 
     ["Shift", "", ""], ["z", "", "я"], ["x", "", "ч"], ["c", "", "с"], ["v", "", "м"], ["b", "", "и"], ["n", "", "т"], ["m", "", "ь"], [",", "<", "б"], [".", ">", "ю"], ["/", "?", "."], ["Shift", "", ""], ["Up", "", ""],
     ["Ctrl", "", ""] , ["Wn", "", ""], ["Alt", "", ""], ["Space", "", ""], ["RAlt", "", ""], ["RCtrl", "", ""], ["Left", "", ""], ["Down", "", ""], ["Right", "", ""]
   ],
+
   renderKeyboard: function () {
     let body = document.querySelector('body');
     let fragment = document.createDocumentFragment();
@@ -52,59 +53,113 @@ const keyBoard = {
 
     keyBoard.input(body,keyboardArea);
   }, 
+
   input: function (body, keyboardArea) {
 
     body.addEventListener('keydown', function(e) {
       let button = keyboardArea.querySelector(`[id ="${e.keyCode}"]`);
 
+      button.classList.add('active');
+
       if ( e.keyCode === 16 ) keyBoard.shiftPress = true;
       if ( e.keyCode === 17 ) keyboardArea.ctrlPress = true;
-      if ( keyBoard.capsLock === true || keyBoard.shiftPress === true ) {
-        let text = '';
-
-        if (keyBoard.lang === "ru") {
-          for (let i = 0; i < keyBoard.buttonsSigns.length; i++) {
-
-            if ( keyBoard.buttonsSigns[i][2] ) {
-              text = keyboardArea.querySelector(`[id ="${keyBoard.buttonsCodes[i]}"]`).textContent.toUpperCase();
-              keyboardArea.querySelector(`[id ="${keyBoard.buttonsCodes[i]}"]`).textContent = text;
-            } else if ( keyBoard.buttonsSigns[i][1] ) {
-                keyboardArea.querySelector(`[id ="${keyBoard.buttonsCodes[i]}"]`).textContent = keyBoard.buttonsSigns[i][1];
-            }
-          }
-        }
-        if (keyBoard.lang === "en") {
-          for (let i = 0; i < keyBoard.buttonsSigns.length; i++) {
-
-            if ( keyBoard.buttonsSigns[i][1] ) {
-              keyboardArea.querySelector(`[id ="${keyBoard.buttonsCodes[i]}"]`).textContent = keyBoard.buttonsSigns[i][1];    
-            } else if ( keyBoard.buttonsSigns[i][0] >= "a" &&  keyBoard.buttonsSigns[i][0] <= "z") {
-                text = keyboardArea.querySelector(`[id ="${keyBoard.buttonsCodes[i]}"]`).textContent.toUpperCase();
-                keyboardArea.querySelector(`[id ="${keyBoard.buttonsCodes[i]}"]`).textContent = text;
-            }
-
-          }
-        }
-      }
-
-      button.classList.add('active');
+      
       if ( e.keyCode === 20 ) {
         if (keyBoard.capsLock === false) { 
           keyBoard.capsLock = true;
          } else { 
            keyBoard.capsLock = false;
+           shift(false);
            button.classList.remove('active');          
          }
       }
-
-      if ( !(e.keyCode === 20) ) {
+     
+      if ( e.keyCode !== 20 ) {
         body.addEventListener('keyup', function() {
-          if (e.keyCode === 16) keyBoard.shiftPress = false;
+          if (e.keyCode === 16) {
+            keyBoard.shiftPress = false;
+            if (keyBoard.capsLock !==true) {
+              shift(false);
+            }
+          } 
           if (e.keyCode === 17) keyboardArea.ctrlPress = false;
-          button.classList.remove('active');
+          button.classList.remove('active'); 
         })
       }    
+      if ( keyBoard.capsLock === true || keyBoard.shiftPress === true ) {
+        shift(true);
+      }
+      if (e.keyCode === 18 ) {
+        keyBoard.lang = ( keyBoard.lang === "ru") ?  "en" : "ru";
+        changeLang();
+      }
     })
+
+    keyboardArea.addEventListener('click', function() {
+
+    })
+
+    function changeLang() {
+      for (let i = 0; i < keyBoard.buttonsSigns.length; i++) {
+        if ( keyBoard.lang === "ru" ) {
+          if (keyBoard.buttonsSigns[i][2]) {
+            text = keyBoard.buttonsSigns[i][2];
+            keyboardArea.querySelector(`[id ="${keyBoard.buttonsCodes[i]}"]`).textContent = text;
+          }
+        }
+        if ( keyBoard.lang === "en" ) {
+          if (keyBoard.buttonsSigns[i][2]) {
+            text = keyBoard.buttonsSigns[i][0];
+            keyboardArea.querySelector(`[id ="${keyBoard.buttonsCodes[i]}"]`).textContent = text;
+            if (keyBoard.buttonsSigns[i][2]) {
+              
+            }
+          }
+        }
+      }
+      
+    }
+    function shift(condition) {
+      let text = '';
+      if (keyBoard.lang === "ru") {
+        for (let i = 0; i < keyBoard.buttonsSigns.length; i++) {
+  
+          if ( keyBoard.buttonsSigns[i][2] ) {
+            if (condition) {
+              text = keyboardArea.querySelector(`[id ="${keyBoard.buttonsCodes[i]}"]`).textContent.toUpperCase();
+            } else { text = keyboardArea.querySelector(`[id ="${keyBoard.buttonsCodes[i]}"]`).textContent.toLowerCase();
+            }        
+            keyboardArea.querySelector(`[id ="${keyBoard.buttonsCodes[i]}"]`).textContent = text;
+          } else if ( keyBoard.buttonsSigns[i][1] ) {
+            if(condition) {
+              keyboardArea.querySelector(`[id ="${keyBoard.buttonsCodes[i]}"]`).textContent = keyBoard.buttonsSigns[i][1];
+            } else {
+              keyboardArea.querySelector(`[id ="${keyBoard.buttonsCodes[i]}"]`).textContent = keyBoard.buttonsSigns[i][0];
+            }          
+          }
+        }
+      }
+      if (keyBoard.lang === "en") {
+        for (let i = 0; i < keyBoard.buttonsSigns.length; i++) {
+  
+          if ( keyBoard.buttonsSigns[i][1] ) {
+            if (condition) {
+              keyboardArea.querySelector(`[id ="${keyBoard.buttonsCodes[i]}"]`).textContent = keyBoard.buttonsSigns[i][1]; 
+            } else {
+              keyboardArea.querySelector(`[id ="${keyBoard.buttonsCodes[i]}"]`).textContent = keyBoard.buttonsSigns[i][0]; 
+            }
+              
+          } else if ( keyBoard.buttonsSigns[i][0] >= "a" &&  keyBoard.buttonsSigns[i][0] <= "z") {
+            if(condition){ 
+              text = keyboardArea.querySelector(`[id ="${keyBoard.buttonsCodes[i]}"]`).textContent.toUpperCase();
+            } else {
+              text = keyboardArea.querySelector(`[id ="${keyBoard.buttonsCodes[i]}"]`).textContent.toLowerCase();
+            }          
+              keyboardArea.querySelector(`[id ="${keyBoard.buttonsCodes[i]}"]`).textContent = text;
+          } 
+        }
+      }
+    }
   }
 }
 keyBoard.renderKeyboard();
