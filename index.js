@@ -27,6 +27,7 @@ const keyBoard = {
     let body = document.querySelector('body');
     let fragment = document.createDocumentFragment();
     let keyboardArea = document.createElement('div');
+    let textArea = document.createElement('input');
     let button = '';
     let langIndex = keyBoard.langCode[keyBoard.lang];
 
@@ -36,6 +37,8 @@ const keyBoard = {
     }
 
     fragment.appendChild(keyboardArea).classList.add('keyboard-area');
+    keyboardArea.appendChild(textArea).classList.add('text-area');
+    textArea.setAttribute("autofocus",'true')
     body.appendChild(fragment);  
 
     function langPanel(i, langIndex) {
@@ -51,15 +54,29 @@ const keyBoard = {
       }
     }
 
-    keyBoard.input(body,keyboardArea);
+    keyBoard.input(body,keyboardArea, textArea);
   }, 
 
-  input: function (body, keyboardArea) {
-
+  input: function (body, keyboardArea, textArea) {
+    let button;
     body.addEventListener('keydown', function(e) {
-      let button = keyboardArea.querySelector(`[id ="${e.keyCode}"]`);
+      button = keyboardArea.querySelector(`[id ="${e.keyCode}"]`);
 
+      onInput("keyup", button, e, textArea); 
+    })
+
+    keyboardArea.addEventListener('mousedown', function(e) {
+      if (e.target !== body || e.target !== textArea) {
+      button = e.target;
+      }
+      onInput("mouseup", button, e, textArea);
+
+     
+    })
+    function onInput(event, button, e) {    
       button.classList.add('active');
+
+      textArea.textContent += (button.textContent.length < 2) ? button.textContent : ''; 
 
       if ( e.keyCode === 16 ) keyBoard.shiftPress = true;
       if ( e.keyCode === 17 ) keyboardArea.ctrlPress = true;
@@ -75,7 +92,7 @@ const keyBoard = {
       }
      
       if ( e.keyCode !== 20 ) {
-        body.addEventListener('keyup', function() {
+        body.addEventListener(event, function() {
           if (e.keyCode === 16) {
             keyBoard.shiftPress = false;
             if (keyBoard.capsLock !==true) {
@@ -85,20 +102,15 @@ const keyBoard = {
           if (e.keyCode === 17) keyboardArea.ctrlPress = false;
           button.classList.remove('active'); 
         })
-      }    
-      if ( keyBoard.capsLock === true || keyBoard.shiftPress === true ) {
-        shift(true);
-      }
+      }   
       if (e.keyCode === 18 ) {
         keyBoard.lang = ( keyBoard.lang === "ru") ?  "en" : "ru";
         changeLang();
+      } 
+      if ( keyBoard.capsLock === true || keyBoard.shiftPress === true ) {
+        shift(true);
       }
-    })
-
-    keyboardArea.addEventListener('click', function() {
-
-    })
-
+    }
     function changeLang() {
       for (let i = 0; i < keyBoard.buttonsSigns.length; i++) {
         if ( keyBoard.lang === "ru" ) {
