@@ -1,0 +1,25 @@
+{
+  "name": "codejam-virtual-keyboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndreyKokorev/codejam-virtual-keyboard.git"
+  },
+  "author": "Adnrey Kokorev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AndreyKokorev/codejam-virtual-keyboard/issues"
+  },
+  "homepage": "https://github.com/AndreyKokorev/codejam-virtual-keyboard#readme",
+  "devDependencies": {
+    "eslint-config-rallycoding": "^3.2.0"
+  },
+  "dependencies": {
+    "eslint": "^6.6.0"
+  }
+}
