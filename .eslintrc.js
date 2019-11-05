@@ -1,4 +1,6 @@
 module.exports = {
+    root: true,
+    parser: 'babel-eslint',
     "env": {
         "browser": true,
         "es6": true
@@ -9,8 +11,13 @@ module.exports = {
         "SharedArrayBuffer": "readonly"
     },
     "parserOptions": {
-        "ecmaVersion": 2018
+        "ecmaVersion": 2018,
+        allowImportExportEverywhere: true,
+        codeFrame: false
     },
     "rules": {
-    }
+    },
+    extends: [
+        'airbnb-standard',
+      ],
 };
